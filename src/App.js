@@ -1,17 +1,38 @@
-import React, {useState} from "react"
+import React, { useState } from "react";
 import "./App.css";
+import Header from "./components/Main/Header/Header";
 import Main from "./components/Main/Main";
 import { moviesData } from "./moviesData";
 
 function App() {
   const [movies, setMovies] = useState(moviesData);
+  const [searchName, setSearchName] = useState("");
+  const [searchRate, setSearchRate] = useState(0);
 
-  const AddNewMovie=(x)=>{
-    setMovies([...movies, x])
-  }
+  const AddNewMovie = (x) => {
+    setMovies([...movies, x]);
+  };
   return (
     <div className="App">
-      <Main movies={movies} AddNewMovie={AddNewMovie} />
+      <Header
+        setSearchName={setSearchName}
+        setSearchRate={setSearchRate}
+        searchRate={searchRate}
+      />
+      <Main
+        movies={
+          (searchName || searchRate)
+            ? movies.filter(
+                (el) =>
+                  el.name
+                    .toLowerCase()
+                    .includes(searchName.toLowerCase().trim()) &&
+                  el.rating >= searchRate
+              )
+            : movies
+        }
+        AddNewMovie={AddNewMovie}
+      />
     </div>
   );
 }
